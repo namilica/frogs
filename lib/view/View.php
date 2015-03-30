@@ -1,13 +1,9 @@
 <?php namespace frogs\view;
 
 class View{
-	protected $filePath;
-	protected $cachePath;
 	protected $compiler;
-	public function __construct($filePath, $cachePath){
-		$this->filePath = $filePath;
-		$this->cachePath = $cachePath;
-		$this->compiler = new Compiler($this->filePath, $this->cachePath);
+	public function __construct(){
+		$this->compiler = new Compiler();
 	}
 	protected $data;
 	protected $file;

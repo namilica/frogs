@@ -1,18 +1,17 @@
 <?php namespace frogs\view;
 
+define("TEMPLATE_DIR", \APP_DIR.'/views');
+define("CACHE_DIR", \APP_DIR.'/../storage/cache');
+
 class Compiler{
 	protected $templateExtension = "html";
-	protected $filePath;
-	protected $cachePath;
-	public function __construct($filePath, $cachePath){
-		$this->filePath = $filePath;
-		$this->cachePath = $cachePath;
-	}
+	static $filePath = TEMPLATE_DIR;
+	static $cachePath = CACHE_DIR;
 	public function compilePath($file){
-		return $this->cachePath.'/'.md5($file);
+		return self::$cachePath.'/'.md5($file);
 	}
 	public function templatePath($file){
-		return $this->filePath.'/'.$file.'.'.$this->templateExtension;
+		return self::$filePath.'/'.$file.'.'.$this->templateExtension;
 	}
 	public function isExpired($file){
 		$templatePath = $this->templatePath($file);
