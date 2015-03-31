@@ -2,12 +2,12 @@
 
 class View{
 	protected $compiler;
-	public function __construct(){
-		$this->compiler = new Compiler();
-	}
 	protected $data;
 	protected $file;
-	public function draw($file, $data = []){
+	function __construct(){
+		$this->compiler = new Compiler();
+	}
+	function draw($file, $data = []){
 		$compiler = $this->compiler;
 		if($compiler->isExpired($file))
 			$compiler->compile($file);

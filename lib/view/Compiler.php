@@ -7,13 +7,13 @@ class Compiler{
 	protected $templateExtension = "html";
 	static $filePath = TEMPLATE_DIR;
 	static $cachePath = CACHE_DIR;
-	public function compilePath($file){
+	function compilePath($file){
 		return self::$cachePath.'/'.md5($file);
 	}
-	public function templatePath($file){
+	function templatePath($file){
 		return self::$filePath.'/'.$file.'.'.$this->templateExtension;
 	}
-	public function isExpired($file){
+	function isExpired($file){
 		$templatePath = $this->templatePath($file);
 		$compiledPath = $this->compilePath($file);
 		if(!file_exists($compiledPath))
@@ -21,12 +21,12 @@ class Compiler{
 		else
 			return (filemtime($templatePath)>=filemtime($compiledPath));
 	}
-	public function compile($file){
+	function compile($file){
 		$templatePath = $this->templatePath($file);
 		$compiledPath = $this->compilePath($file);
 		file_put_contents($compiledPath, $this->compileString(file_get_contents($templatePath)));
 	}
-	public function compileString($template){
+	function compileString($template){
 		$result = '';
 		foreach (token_get_all($template) as $token){
 			$result .= is_array($token) ? $this->parsePHPToken($token, $this->compilers) : $token;
