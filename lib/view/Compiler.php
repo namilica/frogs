@@ -1,7 +1,7 @@
 <?php namespace frogs\view;
 
-define("TEMPLATE_DIR", \APP_DIR.'/views');
-define("CACHE_DIR", \APP_DIR.'/../storage/cache');
+define("TEMPLATE_DIR", implode(\DS, [\APP_DIR, 'views']));
+define("CACHE_DIR", implode(\DS, [\BASE_DIR, 'db', 'cache']));
 
 class Compiler{
 	protected $templateExtension = "html";
