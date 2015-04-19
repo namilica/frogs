@@ -12,13 +12,13 @@ class Model{
 		return $this;
 	}
 	function __get($name){
-		if(in_array($name, self::$fields))
+		if(in_array($name, static::$fields))
 			return $this->data[$name];
 		else
 			throw new Exception("$name not found in class");
 	}
 	function __set($name, $value){
-		if(in_array($name, self::$fields))
+		if(in_array($name, static::$fields))
 			$this->data[$name] = $value;
 		else
 			throw new Exception("$name not found in class");
