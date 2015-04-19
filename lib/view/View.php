@@ -17,8 +17,7 @@ class View{
 	}
 	private function drawTemplate(){
 		if(!empty($this->data))
-			foreach($this->data as $key => $value)
-				$$key = $value;
+			extract($this->data, EXTR_OVERWRITE);
 		include($this->file);
 	}
 }
