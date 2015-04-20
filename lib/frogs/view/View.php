@@ -7,7 +7,7 @@ class View{
 	function __construct(){
 		$this->compiler = new Compiler();
 	}
-	function draw($file, $data = []){
+	function render($file, $data = []){
 		$compiler = $this->compiler;
 		if($compiler->isExpired($file))
 			$compiler->compile($file);
