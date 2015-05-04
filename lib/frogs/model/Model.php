@@ -1,14 +1,17 @@
 <?php namespace frogs\model;
 
 use \Exception;
+use \frogs\model\Database;
 
-class Model{
+abstract class Model{
 	static $fields = [];
 	protected $data = [];
+	protected $db;
 	function __construct($data = []){
 		if(!empty($data))
 			foreach($data as $name => $value)
 				$this->__set($name, $value);
+		$this->db = new Database(get_class($this), static::$fields);
 		return $this;
 	}
 	function __get($name){
@@ -22,5 +25,11 @@ class Model{
 			$this->data[$name] = $value;
 		else
 			throw new Exception("$name not found in class");
+	}
+	function save(){
+		$this->db->update($this->data);
+	}
+	function all(){
+		return $this->db->all(get_class($this));
 	}
 }
