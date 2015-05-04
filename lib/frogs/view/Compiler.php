@@ -24,7 +24,8 @@ class Compiler{
 	function compile($file){
 		$templatePath = $this->templatePath($file);
 		$compiledPath = $this->compilePath($file);
-		file_put_contents($compiledPath, $this->compileString(file_get_contents($templatePath)));
+		$compilation = $this->compileString(file_get_contents($templatePath));
+		file_put_contents($compiledPath, $compilation);
 	}
 	function compileString($template){
 		$result = '';
@@ -61,11 +62,11 @@ class Compiler{
 			return $this->compileEchoUnescaped($this->compileEchoEscaped($template));
 	}
 	protected function compileEchoUnescaped($template){
-		$pattern = sprintf('/%s\s*(.+)\s*%s/', $this->delimiter[0], $this->delimiter[1]);
+		$pattern = sprintf('/%s\s*(.+?)\s*%s/', $this->delimiter[0], $this->delimiter[1]);
 		return preg_replace($pattern, '<?php echo $1; ?>', $template);
 	}
 	protected function compileEchoEscaped($template){
-		$pattern = sprintf('/%s\s*(.+)\s*%s/', $this->escapedDelimiter[0], $this->escapedDelimiter[1]);
+		$pattern = sprintf('/%s\s*(.+?)\s*%s/', $this->escapedDelimiter[0], $this->escapedDelimiter[1]);
 		return preg_replace($pattern, '<?php echo htmlspecialchars($1); ?>', $template);
 	}
 	protected function compileControl($template){
@@ -83,12 +84,14 @@ class Compiler{
 		$pattern = sprintf('/\t*%s(foreach)\(([^\s]*)\s+as\s+([^\s]*)\)\s*%s/', $this->controlDelimiter[0], $this->controlDelimiter[1]);
 		$compiled = preg_replace($pattern, '<?php if(!empty($2)) $1($2 as $3): ?>', $template);
 		$pattern = sprintf('/\t*%s\s*(endforeach)\s*%s/', $this->controlDelimiter[0], $this->controlDelimiter[1]);
-		$compiled = preg_replace($pattern, '<?php $1; ?>', $compiled);
+		$compiled = preg_replace($pattern, '<?php $1 ?>', $compiled);
 		return $compiled;
 	}
 	protected function compileControlif($template){
-		$pattern = sprintf('/\t*%s\s*(if|else|elseif)(.*)\s*%s/', $this->controlDelimiter[0], $this->controlDelimiter[1]);
-		$compiled = preg_replace($pattern, '<?php $1$2: ?>', $template);
+		$pattern = sprintf('/\t*%s\s*(if|endif)\((.*?)\)\s*%s/', $this->controlDelimiter[0], $this->controlDelimiter[1]);
+		$compiled = preg_replace($pattern, '<?php $1($2): ?>', $template);
+		$pattern = sprintf('/\t*%s\s*(else)\s*%s/', $this->controlDelimiter[0], $this->controlDelimiter[1]);
+		$compiled = preg_replace($pattern, '<?php $1: ?>', $compiled);
 		$pattern = sprintf('/\t*%s\s*(endif)\s*%s/', $this->controlDelimiter[0], $this->controlDelimiter[1]);
 		$compiled = preg_replace($pattern, '<?php $1 ?>', $compiled);
 		return $compiled;
