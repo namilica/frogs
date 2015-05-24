@@ -30,11 +30,4 @@ class Database{
 		$sth = $this->connection->prepare($query);
 		$sth->execute($data);
 	}
-	function __get($name){
-		if(!file_exists(static::$database))
-			throw new Exception('Database does not exist.');
-		if(empty($name) || $name==''){
-			
-		}
-	}
 }

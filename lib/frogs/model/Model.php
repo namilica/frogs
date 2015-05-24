@@ -6,12 +6,10 @@ use \frogs\model\Database;
 abstract class Model{
 	static $fields = [];
 	protected $data = [];
-	protected $db;
 	function __construct($data = []){
 		if(!empty($data))
 			foreach($data as $name => $value)
 				$this->__set($name, $value);
-		$this->db = new Database(static::modelName(), static::$fields);
 		return $this;
 	}
 	function __get($name){
@@ -27,7 +25,8 @@ abstract class Model{
 			throw new Exception("$name not found in class");
 	}
 	function save(){
-		$this->db->update($this->data);
+		$db = new Database(static::modelName(), static::$fields);
+		$db->update($this->data);
 	}
 	static function all(){
 		$db = new Database(static::modelName(), static::$fields);
