@@ -11,7 +11,7 @@ abstract class Model{
 		if(!empty($data))
 			foreach($data as $name => $value)
 				$this->__set($name, $value);
-		$this->db = new Database(get_class($this), static::$fields);
+		$this->db = new Database(static::modelName(), static::$fields);
 		return $this;
 	}
 	function __get($name){
@@ -29,7 +29,14 @@ abstract class Model{
 	function save(){
 		$this->db->update($this->data);
 	}
-	function all(){
-		return $this->db->all(get_class($this));
+	static function all(){
+		$db = new Database(static::modelName(), static::$fields);
+		return $db->all(static::modelName());
+	}
+	static function modelName($short = FALSE){
+		if($short == TRUE)
+			return end(explode("\\", get_called_class()));
+		else
+			return get_called_class();
 	}
 }

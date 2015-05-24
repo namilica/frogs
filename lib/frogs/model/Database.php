@@ -12,7 +12,7 @@ class Database{
 	function __construct($class, $fields){
 		$this->connection = new PDO('sqlite:'.static::$database);
 		$this->class = $class;
-		$this->table = end(explode('\\', $class)).'s';
+		$this->table = $class::modelName(TRUE).'s';
 		foreach($fields as $field)
 			$this->fields[':'.$field] = $field;
 		return $this;
